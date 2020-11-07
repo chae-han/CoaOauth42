@@ -11,3 +11,7 @@
 * 이쁜 언어 파이썬을 이쁘게 잘 쓰기
 
 * 기능 개성을 로그로 꾸준히 남길것
+
+# Oauth 개념 잡기 (다이어그램)
+
+![oauth 개념](https://user-images.githubusercontent.com/66206572/98443247-7d1a3500-214d-11eb-9af4-cd98f882b65d.png)
