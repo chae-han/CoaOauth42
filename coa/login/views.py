@@ -19,6 +19,9 @@ def login(request:HttpRequest):
 
 def oauth42(request:HttpRequest):
     try:
+        login = ''
+        access_token = ''
+
         raw_url = request.get_raw_uri()
         arr = raw_url.split('?')
 
@@ -27,23 +30,25 @@ def oauth42(request:HttpRequest):
 
         code = arr[1].split(' ')[0].split('=')[1]
 
+        req = httpr.httpRequest()
+
         body_data = {"grant_type":"authorization_code", "client_id":uid, "client_secret":sec, "code":code, "redirect_uri":redirect_uri}
+        req.httpRequestSet(method='POST', url='https://api.intra.42.fr/oauth/token', headers={'Content-Type': 'application/json'}, body=body_data)
+        r = req.httpRequestStart()
+        # r = httpr.httpRequest(method='POST', url='https://api.intra.42.fr/oauth/token', headers={'Content-Type': 'application/json'}, body=body_data)
 
-        r = httpr.httpRequest(method='POST', url='https://api.intra.42.fr/oauth/token', headers={'Content-Type': 'application/json'}, body=body_data)
         access_token = r['access_token']
+        req.httpRequestSet(method='GET', url='https://api.intra.42.fr/v2/me', headers={'Authorization': 'Bearer ' + access_token})
+        r = req.httpRequestStart()
+        # r = httpr.httpRequest(method='GET', url='https://api.intra.42.fr/v2/me', headers={'Authorization': 'Bearer ' + access_token})
 
-        r = httpr.httpRequest(method='GET', url='https://api.intra.42.fr/v2/me', headers={'Authorization': 'Bearer ' + access_token})
         login = r['login']
-
         result = en_decrypt.set_active_cookie(request, login, access_token)
-
-        if r == -1:
-            raise Exception('error')
 
         return HttpResponseRedirect('/sys42/')
 
     except Exception as e:
-        print("error")
+        print(e)
         return HttpResponseRedirect('/login/')
 
 
