@@ -30,17 +30,17 @@ def oauth42(request:HttpRequest):
 
         code = arr[1].split(' ')[0].split('=')[1]
 
-        req = httpr.httpRequest()
+        # req = httpr.httpRequest()
 
         body_data = {"grant_type":"authorization_code", "client_id":uid, "client_secret":sec, "code":code, "redirect_uri":redirect_uri}
-        req.httpRequestSet(method='POST', url='https://api.intra.42.fr/oauth/token', headers={'Content-Type': 'application/json'}, body=body_data)
-        r = req.httpRequestStart()
-        # r = httpr.httpRequest(method='POST', url='https://api.intra.42.fr/oauth/token', headers={'Content-Type': 'application/json'}, body=body_data)
+        # req.httpRequestSet(method='POST', url='https://api.intra.42.fr/oauth/token', headers={'Content-Type': 'application/json'}, body=body_data)
+        # r = req.httpRequestStart()
+        r = httpr.httpRequest(method='POST', url='https://api.intra.42.fr/oauth/token', headers={'Content-Type': 'application/json'}, body=body_data)
 
         access_token = r['access_token']
-        req.httpRequestSet(method='GET', url='https://api.intra.42.fr/v2/me', headers={'Authorization': 'Bearer ' + access_token})
-        r = req.httpRequestStart()
-        # r = httpr.httpRequest(method='GET', url='https://api.intra.42.fr/v2/me', headers={'Authorization': 'Bearer ' + access_token})
+        # req.httpRequestSet(method='GET', url='https://api.intra.42.fr/v2/me', headers={'Authorization': 'Bearer ' + access_token})
+        # r = req.httpRequestStart()
+        r = httpr.httpRequest(method='GET', url='https://api.intra.42.fr/v2/me', headers={'Authorization': 'Bearer ' + access_token})
 
         login = r['login']
         result = en_decrypt.set_active_cookie(request, login, access_token)
