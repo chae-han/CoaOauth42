@@ -30,7 +30,6 @@ import json
 #         return result
 
 
-
 def httpRequest(method:str='GET', url:str='', body:dict={}, headers:dict={}):
     if body != {}:
         body = json.dumps(body).encode('utf-8')
