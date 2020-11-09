@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'login.apps.LoginConfig',
+    'sys42.apps.Sys42Config',
 ]
 
 MIDDLEWARE = [
@@ -128,7 +129,7 @@ STATIC_URL = '/static/'
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
-SESSION_EXPIRE_SECONDS = 5  # 1 hour 30 minutes
+SESSION_EXPIRE_SECONDS = 200 # 1 hour 30 minutes
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = False
 SESSION_TIMEOUT_REDIRECT = '/login/'
 

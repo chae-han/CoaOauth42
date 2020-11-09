@@ -6,24 +6,35 @@ from login import models
 import os
 from datetime import datetime
 
-keys = os.environ.get('OAUTHKEYS') #OAUTHKEYS
-expired_time_sec = os.environ.get('OAUTHEXP')
+keys = os.environ.get('OAUTHKEYS')
+expired_time_sec = int(os.environ.get('OAUTHEXP'))
+
+
+def set_cookie(response, cookies:dict):
+    for key, value in cookies.items():
+        # set_cookie(key, value='', max_age=None, expires=None, path='/', domain=None, secure=None, httponly=False, samesite=None) :
+        response.set_cookie(key, value, max_age=expired_time_sec)
+    return response
+
+def del_cookie(response):
+    pass
 
 def check_active_cookie(request):
-    if request.COOKIES.get('user_info') is not None:
-        en = AESCipher()
-        decrypt_data = en.decrypt(request.COOKIES.get('user_info').encode("UTF-8"))
-        arr = decrypt_data.split('&')
+    try:
+        if request.COOKIES.get('usif') is not None:
+            en = AESCipher()
+            decrypt_data = en.decrypt(request.COOKIES.get('usif').encode("UTF-8"))
+            arr = decrypt_data.split('&')
 
-        # read access token from db
-        q_set = models.Oauth42.objects.get(login=arr[0])
+            # read access token from db
+            q_set = models.Oauth42.objects.filter(login=arr[0])
 
-        # verify access token and session cookie value
-        if datetime.now().timestamp() - q_set.created_at.timestamp() < int(expired_time_sec) and q_set.access_token == arr[1]:
-            return 0
-        else:
-            return -1
-    else:
+            # verify access token and session cookie value
+            if q_set.exists() and datetime.now().timestamp() - q_set.values()[0]['created_at'].timestamp() < expired_time_sec and q_set.values()[0]['access_token'] == arr[1]:
+                return arr[0] # return login
+        return -1
+    except Exception as e:
+        print(e)
         return -1
 
 def get_active_cookie(request, login:str, token:str):

@@ -10,12 +10,16 @@ redirect_uri = 'http://localhost:8000/login/oauth42/'
 
 
 def login(request:HttpRequest):
-    result = en_decrypt.check_active_cookie(request)
-    if result == -1:
-        return render(request, 'login/index.html')
-    else:
-        return HttpResponseRedirect('/sys42/')
+    try:
+        result = en_decrypt.check_active_cookie(request)
 
+        if result == -1:
+            return render(request, 'login/index.html')
+        else:
+            return HttpResponseRedirect('/sys42/')
+    except Exception as e:
+        print(e)
+        return render(request, 'login/index.html')
 
 def oauth42(request:HttpRequest):
     try:
@@ -40,7 +44,7 @@ def oauth42(request:HttpRequest):
         secret_v = en_decrypt.get_active_cookie(request, login, access_token)
 
         response = HttpResponseRedirect('/sys42/')
-        response.set_cookie('user_info', secret_v)
+        response = en_decrypt.set_cookie(response, cookies={'usif':secret_v})
 
         return response
 
