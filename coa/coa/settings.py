@@ -123,6 +123,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'login', 'static'),
+    #os.path.join(BASE_DIR, 'sys42', 'static'),
+]
+
 # session settings
 # SESSION_COOKIE_AGE = 5 # second
 # SESSION_SAVE_EVERY_REQUEST = False

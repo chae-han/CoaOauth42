@@ -19,7 +19,7 @@ def login(request:HttpRequest):
             return HttpResponseRedirect('/sys42/')
     except Exception as e:
         print(e)
-        return render(request, 'login/index.html')
+        return render(request, 'login/index.html', {'oauth_app_url':oauth_app_url})
 
 def oauth42(request:HttpRequest):
     try:

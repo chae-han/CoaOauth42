@@ -11,6 +11,7 @@ expired_time_sec = int(os.environ.get('OAUTHEXP'))
 
 
 def set_cookie(response, cookies:dict):
+    print("set_cookie")
     for key, value in cookies.items():
         # set_cookie(key, value='', max_age=None, expires=None, path='/', domain=None, secure=None, httponly=False, samesite=None) :
         response.set_cookie(key, value, max_age=expired_time_sec)
